@@ -3,6 +3,7 @@ import { BrowserWindow, nativeTheme, app } from "electron"
 import path = require("path")
 import { setThemeListener } from "./settings"
 import { setUtilsListeners } from "./utils"
+import { Input } from "electron/main"
 
 export class WindowManager {
     mainWindow: BrowserWindow = null
@@ -75,8 +76,16 @@ export class WindowManager {
             this.mainWindow.on("ready-to-show", () => {
                 this.mainWindow.show()
                 this.mainWindow.focus()
-                if (!app.isPackaged) this.mainWindow.webContents.openDevTools()
             })
+            this.mainWindow.webContents.on('before-input-event', (event, input: Input) => {
+                let contents = this.mainWindow?.webContents
+                if (contents == null) return;
+                if (input.type === "keyDown") {
+                    if (input.key === 'F12') {
+                        contents.openDevTools();
+                    }
+                }
+        })
             this.mainWindow.loadFile(
                 (app.isPackaged ? "dist/" : "") + "index.html"
             )

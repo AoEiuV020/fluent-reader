@@ -239,8 +239,12 @@ export function setUtilsListeners(manager: WindowManager) {
             })
             contents.on("before-input-event", (_, input) => {
                 if (manager.hasWindow()) {
-                    let contents = manager.mainWindow.webContents
-                    contents.send("webview-keydown", input)
+                    manager.mainWindow.webContents.send("webview-keydown", input)
+                    if (input.type === "keyDown") {
+                        if (input.key === 'F12') {
+                            contents.openDevTools();
+                        }
+                    }
                 }
             })
             if (getWebViewOpenUrlStatus()) {
