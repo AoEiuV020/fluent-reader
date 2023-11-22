@@ -35,6 +35,7 @@ type AppTabProps = {
 
 type AppTabState = {
     webViewOpenUrlStatus: boolean
+    doubleClickStatus: boolean
     pacStatus: boolean
     pacUrl: string
     themeSettings: ThemeSettings
@@ -48,6 +49,7 @@ class AppTab extends React.Component<AppTabProps, AppTabState> {
         super(props)
         this.state = {
             webViewOpenUrlStatus: window.settings.getWebViewOpenUrlStatus(),
+            doubleClickStatus: window.settings.getDoubleClickStatus(),
             pacStatus: window.settings.getProxyStatus(),
             pacUrl: window.settings.getProxy(),
             themeSettings: getThemeSettings(),
@@ -162,6 +164,13 @@ class AppTab extends React.Component<AppTabProps, AppTabState> {
         this.setState({
             pacStatus: window.settings.getProxyStatus(),
             pacUrl: window.settings.getProxy(),
+        })
+    }
+
+    toggleDoubleClickStatus = () => {
+        window.settings.toggleDoubleClickStatus()
+        this.setState({
+            doubleClickStatus: window.settings.getDoubleClickStatus(),
         })
     }
 
@@ -285,6 +294,21 @@ class AppTab extends React.Component<AppTabProps, AppTabState> {
                     </span>
                 </form>
             )}
+
+            <Stack horizontal verticalAlign="baseline">
+                <Stack.Item grow>
+                    <Label>{intl.get("app.enableDoubleClick")}</Label>
+                </Stack.Item>
+                <Stack.Item>
+                    <Toggle
+                        checked={this.state.doubleClickStatus}
+                        onChange={this.toggleDoubleClickStatus}
+                    />
+                </Stack.Item>
+            </Stack>
+            <span className="settings-hint up">
+                {intl.get("app.doubleClickHint")}
+            </span>
 
             <Label>{intl.get("app.cleanup")}</Label>
             <Stack horizontal>

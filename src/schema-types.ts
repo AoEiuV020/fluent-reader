@@ -87,6 +87,7 @@ export type SchemaTypes = {
     pac: string
     pacOn: boolean
     webViewOpenUrlStatus: boolean
+    doubleClickStatus: boolean
     view: ViewType
     locale: string
     sourceGroups: SourceGroup[]
